@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- TODO: 프로젝트 설명으로 수정 -->
+  <meta name="description" content="PROJECT: Short description of your project.">
+  <meta name="keywords" content="PROJECT, 3D, Gaussian Splatting, Feed-forward, CV, etc.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- TODO: 페이지 제목 수정 -->
+  <title>MoRel: Long-Range Flicker-Free 4D Motion Modeling via Anchor Relay-based Bidirectional Blending with Hierarchical Densification</title>
+
+  <link rel="icon" type="image/svg+xml" href="./images/icon.svg">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  
+  <!-- Bulma & Icons -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  
+  <!-- Image Comparison Slider (선택 사용) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css"/>
+
+  <!-- 방문자 카운터 (선택) -->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <style>
+    /* --- Lab Identity & Dark Theme --- */
+    :root {
+        --lab-color: #0D207F;     /* Lab main color */
+        --lab-light: #4c6ef5;
+        --bg-color: #0f111a;
+        --card-bg: #1a1c29;
+        --text-color: #e0e0e0;
+        --accent-gradient: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Google Sans', sans-serif;
+        line-height: 1.6;
+    }
+
+    .title { color: #ffffff !important; }
+    .subtitle { color: #b0b0b0 !important; }
+
+    a {
+        color: var(--lab-light);
+        transition: color 0.3s ease;
+    }
+    a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    strong {
+        color: var(--lab-light);
+        font-weight: 700;
+    }
+
+    .gradient-text {
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 200% auto;
+        animation: shine 4s linear infinite;
+        font-weight: 800;
+    }
+    @keyframes shine { to { background-position: 200% center; } }
+
+    .button.is-dark-custom {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .button.is-dark-custom:hover {
+        background: var(--lab-color);
+        border-color: var(--lab-light);
+        box-shadow: 0 0 20px rgba(13, 32, 127, 0.6);
+        transform: translateY(-3px);
+    }
+
+    /* Slider */
+    .slider-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 12px;
+        position: relative;
+        background: #000;
+    }
+    img-comparison-slider {
+        --divider-width: 2px;
+        --divider-color: #00f2fe;
+        --default-handle-opacity: 1;
+        width: 100%;
+        height: 100%;
+        outline: none;
+    }
+    img-comparison-slider img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+    .slider-shadow {
+        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        transition: box-shadow 0.3s ease;
+    }
+    .slider-shadow:hover {
+        box-shadow: 0 30px 60px rgba(13, 32, 127, 0.4);
+    }
+    img-comparison-slider figcaption {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        position: absolute;
+        top: 20px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        pointer-events: none;
+        backdrop-filter: blur(2px);
+        line-height: 1;
+    }
+    .before figcaption { left: 20px; }
+    .after figcaption { right: 20px; color: #00f2fe; }
+
+    .tldr-box {
+        background: rgba(13, 32, 127, 0.15);
+        border-left: 4px solid var(--lab-color);
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+    }
+
+    .glass-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 25px;
+        border-radius: 16px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .section-title {
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+    .section-title::after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background: var(--lab-light);
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer {
+        background-color: #050505;
+        padding: 4rem 1.5rem;
+    }
+
+    .project-icon {
+        width: 180px;
+        height: auto;
+        margin-bottom: 1rem;
+        background-color: transparent !important;
+        filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+    }
+
+    .method-title {
+        color: var(--lab-light);
+        margin-bottom: 10px;
+        font-weight: 700;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 10px;
+    }
+
+    img[src$=".png"] {
+        background-color: white;
+    }
+    .text-red {
+      color: #ff4444;
+    }
+</style>
+  </style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px;">
+             <img src="./images/icon.png" class="project-icon" alt="Project Icon">
+             
+             <h1 class="title is-1 publication-title" style="margin-top: 0; line-height: 1;">
+                <span class="gradient-text" style="font-size: 5.0rem;">MoRel</span>
+             </h1>
+          </div>
+
+          <h2 class="title is-3 publication-title">
+            <br>
+            Long-Range Flicker-Free 4D <span style="color: var(--lab-light) !important;">Mo</span>tion Modeling Anchor <span style="color: var(--lab-light) !important;">Rel</span>ay-based Bidirectional Blending via with Hierarchical Densification
+            
+          </h2>
+<!-- 저자 정리 -->
+          <div class="is-size-5 publication-authors" style="margin-top: 25px;">
+            <span class="author-block">
+              <a href="https://www.viclab.kaist.ac.kr/">Sangwoon Kwak</a><sup><img src="./images/etri.png" style="height: 15px; vertical-align: middle; background: none; margin-left: 4px;"><img src="./images/kaist.png" style="width: 1em; height: 1em; vertical-align: middle; background: none; margin-left: 2px;">*</sup> &nbsp;&nbsp;&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://cmlab.cau.ac.kr/">Weeyoung Kwon</a><sup><img src="./images/cau.png" style="height: 20px; vertical-align: middle; background: none; margin-left: 4px;">*</sup> &nbsp;&nbsp;&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="jyj0120@etri.re.kr">JunYoung Jeong</a> <sup><img src="./images/etri.png" style="height: 15px; vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://cmlab.cau.ac.kr/">Geonho Kim</a> <sup><img src="./images/cau.png" style="height: 20px; vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
+            </span> <br>
+            <span class="author-block">
+              <a href="joonsookim@etri.re.kr">Joonsoo Kim</a> <sup><img src="./images/etri.png" style="height: 15px;vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="wscheong@etri.re.kr">Won-Sik Cheong</a> <sup><img src="./images/etri.png" style="height: 15px; vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://sites.google.com/view/ozbro/" target="_blank">Jihyong Oh</a> <sup><img src="./images/cau.png" style="height: 20px; vertical-align: middle; background: none; margin-left: 4px;">†</sup>
+            </span>
+          </div>
+          
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <sup>
+              <img src="./images/etri.png" 
+                   alt="Etri Icon" 
+                   style="height: 20px; vertical-align: middle; margin-right: 8px; background: none;">
+              1</sup>ETRI, South Korea</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <img src="./images/kaist.png" 
+                   alt="Kaist Icon" 
+                   style="height: 20px; vertical-align: middle; margin-right: 8px; background: none;">
+              2</sup>KAIST, South Korea</span>
+            </span>
+          </div>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <sup>
+              <img src="./images/cau.png" 
+                   alt="CAU Icon" 
+                   style="height: 25px; vertical-align: middle; margin-right: 8px; background: none;">
+              3</sup>Chung-Ang University, South Korea</span>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block" style="font-size: small;"> <sup>*</sup>Equal contribution</span> &nbsp;&nbsp;&nbsp;
+            <span class="author-block" style="font-size: small;"> <sup>†</sup>Co-corresponding authors</span>
+            <!-- <span class="author-block"><sup>†</sup>Corresponding author</span> -->
+          </div>
+
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+
+              <!-- TODO: 링크 추가 (아카이브 코드) -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark-custom">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span> &nbsp;&nbsp;&nbsp;
+                  <span>Paper (Coming Soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/ORG/REPO" class="external-link button is-normal is-rounded is-dark-custom">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TL;DR ================= -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      
+      <div class="tldr-box">
+          <h3 class="title is-4" style="color: var(--lab-light); margin-bottom: 0.5rem;">TL;DR</h3>
+          <!-- TODO: 프로젝트 요약 -->
+          <p class="is-size-5">
+              <strong>MoRel</strong> is a 4D Gaussian Splatting framework that achieves temporally coherent, flicker-free 
+              long-range motion scene reconstruction under bounded memory via anchor <strong>relay-based bidirectional blending</strong>.
+              It further employs feature-variance-guided hierarchical densification to allocate representation capacity where needed, 
+              improving reconstruction quality without sacrificing efficiency.
+          </p>
+      </div>
+      
+      
+        <h2 class="title is-3 section-title">Long-Range 4D Reconstruction</h2>
+      
+        <div class="columns is-centered is-variable is-6">
+          
+          <div class="column is-6 has-text-centered">
+            <div class="glass-box">
+              <h3 class="title is-4" style="margin-bottom: 15px;">
+                <span class="gradient-text">All-at-Once vs MoRel</span>
+              </h3>
+              <div class="slider-container">
+                <img-comparison-slider class="slider-shadow">
+                  <figure slot="first" class="before">
+                    <video src="./images/LocalDyGS_bike1_pose1.mp4"
+                          autoplay
+                          loop
+                          muted
+                          playsinline
+                          class="video-fill"></video>
+                    <figcaption>ALL-AT-ONCE</figcaption>
+                  </figure>
+                  <figure slot="second" class="after">
+                    <video src="./images/Ours_bike1_pose1.mp4"
+                          autoplay
+                          loop
+                          muted
+                          playsinline
+                          class="video-fill"></video>
+                    <figcaption>MoRel (OURS)</figcaption>
+                  </figure>
+                </img-comparison-slider>
+              </div>
+              <p class="is-size-6 has-text-left" style="margin-top: 15px; color: #ccc;">
+                Compared to all-at-once methods, MoRel provides more faithful long-range motion reconstruction and improved temporal consistency, 
+                while still avoiding GPU memory explosion.
+              </p>
+            </div>
+          </div>
+
+          <div class="column is-6 has-text-centered">
+            <div class="glass-box">
+              <h3 class="title is-4" style="margin-bottom: 15px;">
+                <span class="gradient-text">Chunk-Based vs MoRel</span>
+              </h3>
+              <div class="slider-container">
+                <img-comparison-slider class="slider-shadow">
+                  <figure slot="first" class="before">
+                    <video src="./images/GIFStream_bike2_pose2.mp4"
+                          autoplay
+                          loop
+                          muted
+                          playsinline
+                          class="video-fill"></video>
+                    <figcaption>CHUNK-BASED BASELINE</figcaption>
+                  </figure>
+                  <figure slot="second" class="after">
+                    <video src="./images/Ours_bike2_pose2.mp4"
+                          autoplay
+                          loop
+                          muted
+                          playsinline
+                          class="video-fill"></video>
+                    <figcaption>MoRel (OURS)</figcaption>
+                  </figure>
+                </img-comparison-slider>
+              </div>
+              <p class="is-size-6 has-text-left" style="margin-top: 15px; color: #ccc;">
+                While chunk-based baselines suffer from boundary flicker and appearance shifts
+                between segments, MoRel’s anchor relay and bidirectional blending yield stable,
+                temporally coherent long-range 4D reconstruction.
+              </p>
+            </div>
+          </div>
+        </div>
+              
+        <div class="content has-text-centered is-size-6" style="color: #666; margin-top: 20px;">
+          <i class="fas fa-arrows-alt-h"></i>
+          Slide to compare <strong>MoRel</strong> against <strong>All-at-once</strong> and
+          <strong>Chunk-based</strong> baselines on long-range dynamic scenes.
+        </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABSTRACT ================= -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 section-title">Abstract</h2>
+        <div class="content has-text-justified is-size-5">
+          <p>
+            Recent advances in 4D Gaussian Splatting (4DGS) have extended the high-speed rendering capability of
+            3D Gaussian Splatting (3DGS) into the temporal domain, enabling real-time rendering of dynamic scenes.
+            However, one of the major remaining challenges lies in modeling long-range motion-contained dynamic videos, where a naïve
+            extension of existing methods leads to severe memory explosion, temporal flickering, and failure to handle appearing or
+            disappearing occlusions over time.
+          </p>
+
+          <p>
+            To address these challenges, we propose a novel 4DGS framework characterized by an
+            <strong>Anchor Relay-based Bidirectional Blending (ARBB)</strong> mechanism, named <strong>MoRel</strong>, which enables
+            temporally consistent and memory-efficient modeling of long-range dynamic scenes.
+            Our method progressively constructs locally canonical anchor spaces at key-frame time index and models inter-frame
+            deformations at the anchor level, enhancing temporal coherence.
+          </p>
+
+          <p>
+            By learning bidirectional deformations between KfA and adaptively blending them through learnable opacity control,
+            our approach mitigates temporal discontinuities and flickering artifacts.
+            We further introduce a <strong>Feature-variance-guided Hierarchical Densification (FHD)</strong> scheme that effectively
+            densifies KfA's while keeping rendering quality, based on an assigned level of feature-variance.
+          </p>
+
+          <p>
+            To effectively evaluate our model's capability to handle real-world long-range 4D motion, we newly compose long-range
+            4D motion-contained dataset, called <strong>SelfCap<sub>LR</sub></strong>. It has larger average dynamic motion magnitude,
+            captured at spatially wider spaces, compared to previous dynamic video datasets.
+          </p>
+
+          <p>
+            Overall, our <strong>MoRel</strong> achieves temporally coherent and flicker-free long-range 4D reconstruction while
+            maintaining bounded memory usage, demonstrating both scalability and efficiency in dynamic Gaussian-based representations.
+            The code and project page will be publicly released.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MOTIVATION ================= -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <h2 class="title is-3 has-text-centered section-title">Motivation &amp; Analysis</h2>
+
+    <!-- High-level motivation -->
+    <div class="columns is-centered" style="margin-bottom: 2rem;">
+      <div class="column is-10">
+        <div class="glass-box">
+          <h3 class="title is-4" style="margin-bottom: 0.75rem;">
+            Why Is Long-Range 4D Motion Still Challenging?
+          </h3>
+          <p class="is-size-5 has-text-justified">
+            Long-range dynamic scenes with thousands of frames expose fundamental limitations of existing
+            4D Gaussian Splatting pipelines. All-at-once training suffers from <span class="text-red"> unbounded memory growth</span>,
+            chunk-based optimization introduces <span class="text-red"> temporal flicker at chunk boundaries</span>, and prior variants
+            trade off temporal consistency, disocclusion handling, and random access in different ways.
+            <strong>MoRel</strong> is designed by revisiting these failure modes and jointly addressing them.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three motivation cards -->
+    <div class="columns is-multiline is-variable is-5">
+
+      <!-- Card 1: All-at-once -->
+      <div class="column is-4">
+        <div class="glass-box">
+          <h4 class="title is-5 method-title">
+            1. All-at-once Training: Memory Explosion &amp; Limited Fidelity
+          </h4>
+          <figure style="margin-bottom: 0.75rem;">
+            <!-- TODO: replace with actual file name -->
+            <img src="./images/motivation_1.png"
+                 alt="All-at-once training vs. MoRel"
+                 style="width: 100%; border-radius: 8px;">
+          </figure>
+          <p class="is-size-6 has-text-left">
+            The first analysis compares all-at-once 4DGS with our approach as the sequence length increases.
+            All-at-once training exhibits almost <span class="text-red">linear growth in memory usage</span> with respect to the number of
+            frames and eventually overflows on 3k-frame sequences, while our anchor relay design keeps memory
+            bounded. At the same time, our method preserves higher representation fidelity for long-range motion.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 2: Chunk-based -->
+      <div class="column is-4">
+        <div class="glass-box">
+          <h4 class="title is-5 method-title">
+            2. Chunk-based Training: Temporal Flicker at Boundaries
+          </h4>
+          <figure style="margin-bottom: 0.75rem;">
+            <!-- TODO: replace with actual file name -->
+            <img src="./images/motivation_2.png"
+                 alt="Chunk-based training vs. MoRel"
+                 style="width: 100%; border-radius: 8px;">
+          </figure>
+          <p class="is-size-6 has-text-left">
+            The second analysis visualizes the frame-wise temporal optical flow (tOF) and 1D temporal profiles
+            for chunk-based baselines. Unidirectional chunk training produces periodic spikes in tOF and
+            discontinuities in the temporal profile, manifesting as visible <span class="text-red">flickering around chunk boundaries</span>.
+            In contrast, our bidirectional anchor relay yields stable tOF curves and smooth temporal transitions.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 3: Design space / existing methods -->
+      <div class="column is-4">
+        <div class="glass-box">
+          <h4 class="title is-5 method-title">
+            3. Limitations of Existing Paradigms for Long-Range 4D Motion
+          </h4>
+          <figure style="margin-bottom: 0.75rem;">
+            <!-- TODO: replace with actual file name -->
+            <img src="./images/motivation_3.png"
+                 alt="Challenges for modeling long-range 4D motion"
+                 style="width: 100%; border-radius: 8px;">
+          </figure>
+          <p class="is-size-6 has-text-left">
+            The third figure summarizes representative 4DGS paradigms in terms of GPU memory,
+            disocclusion handling, temporal consistency, system complexity, and temporal random access.
+            Existing approaches satisfy only a subset of these requirements, revealing structural limitations.
+            Our <strong>Anchor Relay-based Bidirectional Blending (MoRel)</strong> is designed to simultaneously
+            achieve bounded memory, robust disocclusion, strong temporal coherence, and random access with
+            moderate system complexity.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= METHOD ================= -->
+<section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered section-title">Method Overview</h2>
+      <div class="columns is-centered">
+        <div class="column is-full-width has-text-centered">
+          <img src="./images/figure_method.png" alt="Method Overview"
+              style="border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-width: 100%;">
+        </div>
+      </div>
+
+      <div class="content has-text-left" style="margin-top: 25px;">
+        <p class="is-size-5 has-text-justified">
+          <strong>Figure 1.</strong> Overview of <strong>MoRel</strong>.
+          The Anchor Relay-based Bidirectional Blending (ARBB) framework decomposes long-range 4D motion into
+          periodically placed key-frame anchors and bidirectional deformation windows, enabling temporally coherent
+          and memory-bounded 4D Gaussian Splatting.
+          The pipeline consists of an <em>Anchor Relay phase</em> (GCA/KfA construction) and a
+          <em>Bidirectional Blending phase</em> (PWD/IFB) with feature-variance-guided hierarchical densification.
+        </p>
+
+        <div class="columns is-multiline" style="margin-top: 10px;">
+          <div class="column is-6">
+            <div class="glass-box">
+              <h5 class="title is-5 method-title">Global Canonical Anchor (GCA)</h5>
+              <p class="has-text-left">
+                MoRel first trains a single Global Canonical Anchor (GCA) over the entire sequence from an initial
+                point cloud. The GCA provides a globally consistent appearance prior and anchor features whose
+                variances are later used to assign frequency-aware levels for FHD.
+              </p>
+            </div>
+          </div>
+
+          <div class="column is-6">
+            <div class="glass-box">
+              <h5 class="title is-5 method-title">Key-frame Anchors &amp; Anchor Relay</h5>
+              <p class="has-text-left">
+                Periodically placed Key-frame Anchors (KfAs) are initialized from the level-assigned GCA and locally
+                refined around their key-frame indices. Each KfA acts as a local canonical space for its temporal
+                neighborhood, forming an anchor relay that supports long-range modeling and random temporal access
+                under bounded memory.
+              </p>
+            </div>
+          </div>
+
+          <div class="column is-6">
+            <div class="glass-box">
+              <h5 class="title is-5 method-title">Bidirectional Deformation &amp; Blending</h5>
+              <p class="has-text-left">
+                In the Progressive Windowed Deformation (PWD) stage, each KfA learns forward and backward
+                deformation fields within a local bidirectional deformation window, with anchors loaded on demand to
+                keep GPU memory bounded. The Intermediate Frame Blending (IFB) stage then learns temporal opacity
+                weights to fuse neighboring KfAs, yielding smooth transitions and consistent long-range motion.
+              </p>
+            </div>
+          </div>
+
+          <div class="column is-6">
+            <div class="glass-box">
+              <h5 class="title is-5 method-title">Feature-variance-guided Hierarchical Densification</h5>
+              <p class="has-text-left">
+                Feature-variance-guided Hierarchical Densification (FHD) uses the variance of anchor features as a
+                proxy for local frequency, assigning levels and modulating gradient-based densification accordingly.
+                Low-frequency structure is stabilized early, while high-frequency regions are refined later, improving
+                reconstruction quality without exceeding the memory budget.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<<!-- ================= RESULTS ================= -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered section-title">Results</h2>
+
+    <!-- ===== Table 1: Synthetic / Object Sequences ===== -->
+    <div class="columns is-centered" style="margin-bottom: 30px;">
+      <div class="column is-10 has-text-centered">
+        <!-- TODO: 첫 번째 테이블 이미지 (예: synthetic/object 데이터셋) -->
+        <img src="./images/table_1.png"
+          alt="Quantitative Results on Real-World Sequences"
+          style="
+            width: 120%;
+            max-width: 120%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateX(-10%);
+          ">
+
+
+        <div class="content has-text-justified" style="margin-top: 15px; color: #bbb;">
+          <p>
+            <strong>Quantitative results comparison on our newly composed SelfCap<sub>LR</sub>.</strong>
+            Group denotes (a) all-at-once training methods, (b) chunk-based approaches including our unidirectional
+            deformation variant, and (c) our <strong>MoRel</strong> model.
+            <span style="color: #ff4444; font-weight: 700;">Red</span> and
+            <span style="color: #4080ff; text-decoration: underline;">blue</span>
+            denote the best and second-best performances, respectively.
+            Each 3-metric block is reported as
+            PSNR (dB)&uarr; / SSIM&uarr; / LPIPS&darr;.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Table 2: SelfCapLR Long-Range 4D ===== -->
+    <div class="columns is-centered">
+      <div class="column is-10 has-text-centered">
+        <img src="./images/table_2.png"
+          alt="Quantitative Results on Real-World Sequences"
+          style="
+            width: 120%;
+            max-width: 120%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateX(-10%);
+          ">
+          <p class="table-caption">
+            <strong>Quantitative results comparison on the DyCheck-iPhone datasets.</strong>
+            Each block element denotes
+            mPSNR (dB)&uarr; / mSSIM&uarr; / mLPIPS&darr; / Storage (MB)&darr;.
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= DEMO VIDEO ================= -->
+<!-- ================= DEMO VIDEO ================= -->
+<section class="section" id="demo">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered section-title">Demo</h2>
+
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <div class="glass-box">
+          <h4 class="title is-4 method-title">Long-range 4D Reconstruction Demo</h4>
+          <div class="video-wrapper demo-video-lg">
+            <video
+              src="./images/demo.mp4"
+              controls
+              loop
+              muted
+              playsinline
+            ></video>
+          </div>
+          <p class="is-size-6 has-text-left" style="margin-top: 0.75rem;">
+            MoRel reconstructs long-range motion sequences with stable appearance and
+            flicker-free rendering under a bounded memory budget.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ================= BIBTEX ================= -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <!-- TODO: 논문 출판 후 BibTeX 갱신 -->
+    <pre><code>@article{Kwak2025MoRel,
+  title   = {MoRel: Long-Range Flicker-Free 4D Motion Modeling via Anchor Relay-based Bidirectional Blending with Hierarchical Densification},
+  author  = {angwoon Kwak and Weeyoung Kwon and Jun Young Jeong and Geonho Kim and Joonsoo Kim and Won-Sik Cheong and ihyong Oh},
+  journal = {arXiv preprint arXiv:xxxx.xxxxx},
+  year    = {2025}
+}</code></pre>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+        <div style="margin-bottom: 20px;">
+            <h4 class="title is-5" style="color: white; letter-spacing: 2px;">CMLab</h4>
+        </div>
+      
+      <p class="is-size-7" style="color: #666;">
+        This website is licensed under a 
+        <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+          Creative Commons Attribution-ShareAlike 4.0 International License
+        </a>.<br>
+        Website template adapted from 
+        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+      
+      <div style="margin-top: 10px; color: #444;">
+          <span class="icon"><i class="fas fa-eye"></i></span> 
+          <span id="busuanzi_container_page_pv">
+            Page Views: <span id="busuanzi_value_page_pv" style="color: var(--lab-light);"></span>
+          </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
