@@ -686,11 +686,13 @@
 
 <!-- ================= DEMO VIDEO ================= -->
 <section class="section" id="demo">
-  <div class="container is-max-desktop">
+  <!-- is-max-desktop 대신 is-widescreen 사용 -->
+  <div class="container is-widescreen">
     <h2 class="title is-3 has-text-centered section-title">Demo</h2>
 
     <div class="columns is-centered">
-      <div class="column is-10">
+      <!-- is-10 → is-12 로 컬럼 풀 사용 -->
+      <div class="column is-12">
         <div class="glass-box">
           <h4 class="title is-4 method-title">Long-range 4D Reconstruction Demo</h4>
           <div class="video-wrapper demo-video-lg">
@@ -711,6 +713,7 @@
     </div>
   </div>
 </section>
+
 
 
 <!-- ================= BIBTEX ================= -->
@@ -756,5 +759,6 @@
 
 </body>
 </html>
+
 
 
