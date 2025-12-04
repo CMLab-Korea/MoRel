@@ -336,78 +336,91 @@
       
       
         <h2 class="title is-3 section-title">Long-Range 4D Reconstruction</h2>
-      
         <div class="columns is-centered is-variable is-6">
-          
-          <div class="column is-6 has-text-centered">
-            <div class="glass-box">
-              <h3 class="title is-4" style="margin-bottom: 15px;">
-                <span class="gradient-text">All-at-Once vs MoRel</span>
-              </h3>
-              <div class="slider-container">
-                <img-comparison-slider class="slider-shadow">
-                  <figure slot="first" class="before">
-                    <video src="./images/LocalDyGS_bike1_pose1.mp4"
-                          autoplay
-                          loop
-                          muted
-                          playsinline
-                          class="video-fill"></video>
-                    <figcaption>ALL-AT-ONCE</figcaption>
-                  </figure>
-                  <figure slot="second" class="after">
-                    <video src="./images/Ours_bike1_pose1.mp4"
-                          autoplay
-                          loop
-                          muted
-                          playsinline
-                          class="video-fill"></video>
-                    <figcaption>MoRel (OURS)</figcaption>
-                  </figure>
-                </img-comparison-slider>
-              </div>
-              <p class="is-size-6 has-text-left" style="margin-top: 15px; color: #ccc;">
-                Compared to all-at-once methods, MoRel provides more faithful long-range motion reconstruction and improved temporal consistency, 
-                while still avoiding GPU memory explosion.
-              </p>
-            </div>
-          </div>
+  <!-- All-at-Once vs MoRel -->
+  <div class="column is-6 has-text-centered">
+    <div class="glass-box">
+      <h3 class="title is-4" style="margin-bottom: 15px;">
+        <span class="gradient-text">All-at-Once vs MoRel</span>
+      </h3>
+      <div class="slider-container">
+        <img-comparison-slider class="slider-shadow">
+          <!-- LocalDyGS: YouTube -->
+          <figure slot="first" class="before">
+            <iframe
+              class="video-fill"
+              src="https://www.youtube.com/embed/otMiFqjAWHo"
+              title="LocalDyGS (bike1)"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <figcaption>ALL-AT-ONCE</figcaption>
+          </figure>
 
-          <div class="column is-6 has-text-centered">
-            <div class="glass-box">
-              <h3 class="title is-4" style="margin-bottom: 15px;">
-                <span class="gradient-text">Chunk-Based vs MoRel</span>
-              </h3>
-              <div class="slider-container">
-                <img-comparison-slider class="slider-shadow">
-                  <figure slot="first" class="before">
-                    <video src="./images/GIFStream_bike2_pose2.mp4"
-                          autoplay
-                          loop
-                          muted
-                          playsinline
-                          class="video-fill"></video>
-                    <figcaption>CHUNK-BASED BASELINE</figcaption>
-                  </figure>
-                  <figure slot="second" class="after">
-                    <video src="./images/Ours_bike2_pose2.mp4"
-                          autoplay
-                          loop
-                          muted
-                          playsinline
-                          class="video-fill"></video>
-                    <figcaption>MoRel (OURS)</figcaption>
-                  </figure>
-                </img-comparison-slider>
-              </div>
-              <p class="is-size-6 has-text-left" style="margin-top: 15px; color: #ccc;">
-                While chunk-based baselines suffer from boundary flicker and appearance shifts
-                between segments, MoRel’s anchor relay and bidirectional blending yield stable,
-                temporally coherent long-range 4D reconstruction.
-              </p>
-            </div>
-          </div>
-        </div>
+          <!-- Ours bike1: YouTube -->
+          <figure slot="second" class="after">
+            <iframe
+              class="video-fill"
+              src="https://www.youtube.com/embed/0D2r-zXsH2o"
+              title="MoRel (bike1)"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <figcaption>MoRel (OURS)</figcaption>
+          </figure>
+        </img-comparison-slider>
+      </div>
+      <p class="is-size-6 has-text-left" style="margin-top: 15px; color: #ccc;">
+        Compared to all-at-once methods, MoRel provides more faithful long-range motion reconstruction
+        and improved temporal consistency, while still avoiding GPU memory explosion.
+      </p>
+    </div>
+  </div>
+
+  <!-- Chunk-Based vs MoRel -->
+  <div class="column is-6 has-text-centered">
+    <div class="glass-box">
+      <h3 class="title is-4" style="margin-bottom: 15px;">
+        <span class="gradient-text">Chunk-Based vs MoRel</span>
+      </h3>
+      <div class="slider-container">
+        <img-comparison-slider class="slider-shadow">
+          <!-- GIFStream: 로컬 mp4 그대로 -->
+          <figure slot="first" class="before">
+            <video src="./images/GIFStream_bike2_pose2.mp4"
+                   autoplay
+                   loop
+                   muted
+                   playsinline
+                   class="video-fill"></video>
+            <figcaption>CHUNK-BASED BASELINE</figcaption>
+          </figure>
+
+          <!-- Ours bike2: YouTube -->
+          <figure slot="second" class="after">
+            <iframe
+              class="video-fill"
+              src="https://www.youtube.com/embed/fGitCZOyLAM"
+              title="MoRel (bike2)"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <figcaption>MoRel (OURS)</figcaption>
+          </figure>
+        </img-comparison-slider>
+      </div>
+      <p class="is-size-6 has-text-left" style="margin-top: 15px; color: #ccc;">
+        While chunk-based baselines suffer from boundary flicker and appearance shifts between segments,
+        MoRel’s anchor relay and bidirectional blending yield stable, temporally coherent long-range 4D reconstruction.
+      </p>
+    </div>
+  </div>
+</div>
+
+       
               
         <div class="content has-text-centered is-size-6" style="color: #666; margin-top: 20px;">
           <i class="fas fa-arrows-alt-h"></i>
@@ -772,6 +785,7 @@
 
 </body>
 </html>
+
 
 
 
