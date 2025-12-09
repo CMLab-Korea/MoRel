@@ -10,7 +10,7 @@
   <!-- TODO: 페이지 제목 수정 -->
   <title>MoRel: Long-Range Flicker-Free 4D Motion Modeling via Anchor Relay-based Bidirectional Blending with Hierarchical Densification</title>
 
-  <link rel="icon" type="image/svg+xml" href="./images/icon.svg">
+  <link rel="icon" type="image/png" href="./images/icon.png">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   
   <!-- Bulma & Icons -->
@@ -209,8 +209,58 @@
       height: 100%;
       border: 0;
     }
+        .method-slider {
+        position: relative;
+        width: 100%;
+        /* 높이는 이미지에 맞게 자동으로 */
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
 
-</style>
+    .method-slider-track {
+        display: flex;
+        transition: transform 0.4s ease;
+        will-change: transform;
+    }
+
+    .method-slide {
+        flex: 0 0 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .method-slide img {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;   /* 비율 유지하면서 잘리지 않게 */
+        display: block;
+    }
+
+    .method-slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        padding: 0.4rem 0.7rem;
+        cursor: pointer;
+        border-radius: 999px;
+        font-size: 1.4rem;
+        z-index: 2;
+    }
+
+    .method-slider-btn.prev { left: 10px; }
+    .method-slider-btn.next { right: 10px; }
+
+    .method-slider-btn:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+
+
   </style>
 </head>
 <body>
@@ -238,7 +288,7 @@
 <!-- 저자 정리 -->
           <div class="is-size-5 publication-authors" style="margin-top: 25px;">
             <span class="author-block">
-              <a href="https://www.viclab.kaist.ac.kr/">Sangwoon Kwak</a><sup><img src="./images/etri.png" style="height: 15px; vertical-align: middle; background: none; margin-left: 4px;"><img src="./images/kaist.png" style="width: 1em; height: 1em; vertical-align: middle; background: none; margin-left: 2px;">*</sup> &nbsp;&nbsp;&nbsp;
+              <a href="https://www.viclab.kaist.ac.kr/">Sangwoon Kwak</a><sup><img src="./images/etri.png" style="height: 15px; vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
             </span>
             <span class="author-block">
               <a href="https://cmlab.cau.ac.kr/">Weeyoung Kwon</a><sup><img src="./images/cau.png" style="height: 20px; vertical-align: middle; background: none; margin-left: 4px;">*</sup> &nbsp;&nbsp;&nbsp;
@@ -249,9 +299,6 @@
             <span class="author-block">
               <a href="https://cmlab.cau.ac.kr/">Geonho Kim</a> <sup><img src="./images/cau.png" style="height: 20px; vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
             </span> <br>
-            <span class="author-block">
-              <a href="joonsookim@etri.re.kr">Joonsoo Kim</a> <sup><img src="./images/etri.png" style="height: 15px;vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
-            </span>
             <span class="author-block">
               <a href="wscheong@etri.re.kr">Won-Sik Cheong</a> <sup><img src="./images/etri.png" style="height: 15px; vertical-align: middle; background: none; margin-left: 4px;"></sup> &nbsp;&nbsp;&nbsp;
             </span>
@@ -268,27 +315,21 @@
                    alt="Etri Icon" 
                    style="height: 20px; vertical-align: middle; margin-right: 8px; background: none;">
               1</sup>ETRI, South Korea</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-             <sup>
-              <img src="./images/kaist.png" 
-                   alt="Kaist Icon" 
-                   style="height: 20px; vertical-align: middle; margin-right: 8px; background: none;">
-              2</sup>KAIST, South Korea</span>
-            </span>
-          </div>
-          
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
+
+             <span class="author-block">
               <sup>
               <img src="./images/cau.png" 
                    alt="CAU Icon" 
                    style="height: 25px; vertical-align: middle; margin-right: 8px; background: none;">
-              3</sup>Chung-Ang University, South Korea</span>
+              2</sup>Chung-Ang University, South Korea</span>
             </span>
           </div>
+          
+           
 
           <div class="is-size-5 publication-authors">
             <span class="author-block" style="font-size: small;"> <sup>*</sup>Equal contribution</span> &nbsp;&nbsp;&nbsp;
-            <span class="author-block" style="font-size: small;"> <sup>†</sup>Co-corresponding authors</span>
+            <span class="author-block" style="font-size: small;"> <sup>†</sup>Co-corresponding author</span>
             <!-- <span class="author-block"><sup>†</sup>Corresponding author</span> -->
           </div>
 
@@ -304,9 +345,9 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://github.com/ORG/REPO" class="external-link button is-normal is-rounded is-dark-custom">
+                <a href="https://github.com/CMLab-Korea/MoRel-arXiv" class="external-link button is-normal is-rounded is-dark-custom">
                   <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>Code (Coming Soon)</span>
+                  <span>Code</span>
                 </a>
               </span>
             </div>
@@ -328,8 +369,8 @@
           <!-- TODO: 프로젝트 요약 -->
           <p class="is-size-5">
               <strong>MoRel</strong> is a 4D Gaussian Splatting framework that achieves temporally coherent, flicker-free 
-              long-range motion scene reconstruction under bounded memory via anchor <strong>relay-based bidirectional blending</strong>.
-              It further employs feature-variance-guided hierarchical densification to allocate representation capacity where needed, 
+              <strong>long-range motion</strong> scene reconstruction under bounded memory via <strong>anchor relay-based bidirectional blending</strong>.
+              It further employs <strong>feature-variance-guided hierarchical densification</strong> to allocate representation capacity where needed, 
               improving reconstruction quality without sacrificing efficiency.
           </p>
       </div>
@@ -356,7 +397,7 @@
                           muted
                           playsinline
                           class="video-fill"></video>
-                    <figcaption>LocalDyGS</figcaption>
+                    <figcaption>LocalDyGS (ICCV'25)</figcaption>
                   </figure>
                   <figure slot="second" class="after">
                     <video src="./images/Ours_bike1_pose1.mp4"
@@ -390,7 +431,7 @@
                           muted
                           playsinline
                           class="video-fill"></video>
-                    <figcaption>GIFStream</figcaption>
+                    <figcaption>GIFStream (CVPR'25)</figcaption>
                   </figure>
                   <figure slot="second" class="after">
                     <video src="./images/Ours_bike2_pose2.mp4"
@@ -567,79 +608,130 @@
 
 <!-- ================= METHOD ================= -->
 <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered section-title">Method Overview</h2>
-      <div class="columns is-centered">
-        <div class="column is-full-width has-text-centered">
-          <img src="./images/figure_method.png" alt="Method Overview"
-              style="border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-width: 100%;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered section-title">Method Overview</h2>
+
+    <!-- 슬라이더 + Figure1/2/3 캡션 -->
+    <div class="columns is-centered">
+      <div class="column is-full-width has-text-centered">
+        <div class="method-slider">
+          <div class="method-slider-track">
+            <div class="method-slide">
+              <img src="./images/figure_method_1.png" alt="Figure 1">
+            </div>
+            <div class="method-slide">
+              <img src="./images/figure_method_2.png" alt="Figure 2">
+            </div>
+            <div class="method-slide">
+              <img src="./images/figure_method_3.png" alt="Figure 3">
+            </div>
+          </div>
+          <button class="method-slider-btn prev">&#10094;</button>
+          <button class="method-slider-btn next">&#10095;</button>
+        </div>
+        <br>
+        <!-- 여기 한 줄이 세 피규어 공용 캡션 -->
+        <p id="method-caption"
+           class="figure-caption is-size-5 has-text-justified">
+          <!-- JS에서 최초 로딩 시 Figure 1 텍스트로 채움 -->
+        </p>
+      </div>
+    </div>
+
+    <!-- 아래 네 개 박스는 그대로 유지 -->
+    <div class="columns is-multiline" style="margin-top: 10px;">
+      <div class="column is-6">
+        <div class="glass-box">
+          <h5 class="title is-5 method-title">Global Canonical Anchor (GCA)</h5>
+          <p class="has-text-left">
+            MoRel first trains a single <strong> Canonical Anchor (GCA)</strong> over the entire sequence from an initial
+            point cloud. The GCA provides a <strong>globally consistent</strong> appearance prior and anchor features whose
+            variances are later used to assign frequency-aware levels for FHD.
+          </p>
         </div>
       </div>
 
-      <div class="content has-text-left" style="margin-top: 25px;">
-        <p class="is-size-5 has-text-justified">
-          <strong>Figure 1.</strong> Overview of <strong>MoRel</strong>.
-          The Anchor Relay-based Bidirectional Blending (ARBB) framework decomposes long-range 4D motion into
-          periodically placed key-frame anchors and bidirectional deformation windows, enabling temporally coherent
-          and memory-bounded 4D Gaussian Splatting.
-          The pipeline consists of an <em>Anchor Relay phase</em> (GCA/KfA construction) and a
-          <em>Bidirectional Blending phase</em> (PWD/IFB) with feature-variance-guided hierarchical densification.
-        </p>
+      <div class="column is-6">
+        <div class="glass-box">
+          <h5 class="title is-5 method-title">Key-frame Anchors &amp; Anchor Relay</h5>
+          <p class="has-text-left">
+            Periodically placed <strong>Key-frame Anchors (KfAs)</strong> are initialized from the level-assigned GCA and locally
+            refined around their key-frame indices. Each KfA acts as a <strong>local canonical space</strong> for its temporal
+            neighborhood, forming an anchor relay that supports long-range modeling and random temporal access
+            under bounded memory.
+          </p>
+        </div>
+      </div>
 
-        <div class="columns is-multiline" style="margin-top: 10px;">
-          <div class="column is-6">
-            <div class="glass-box">
-              <h5 class="title is-5 method-title">Global Canonical Anchor (GCA)</h5>
-              <p class="has-text-left">
-                MoRel first trains a single Global Canonical Anchor (GCA) over the entire sequence from an initial
-                point cloud. The GCA provides a globally consistent appearance prior and anchor features whose
-                variances are later used to assign frequency-aware levels for FHD.
-              </p>
-            </div>
-          </div>
+      <div class="column is-6">
+        <div class="glass-box">
+          <h5 class="title is-5 method-title">Bidirectional Deformation &amp; Blending</h5>
+          <p class="has-text-left">
+            In the <strong>Progressive Windowed Deformation (PWD)</strong> stage, each KfA learns forward and backward
+            deformation fields within a <strong>local bidirectional deformation window</strong>, with anchors loaded on demand to
+            keep GPU memory bounded. The <strong>Intermediate Frame Blending (IFB)</strong> stage then learns temporal opacity
+            weights to fuse neighboring KfAs, yielding <strong>smooth transitions and consistent long-range motion</strong>.
+          </p>
+        </div>
+      </div>
 
-          <div class="column is-6">
-            <div class="glass-box">
-              <h5 class="title is-5 method-title">Key-frame Anchors &amp; Anchor Relay</h5>
-              <p class="has-text-left">
-                Periodically placed Key-frame Anchors (KfAs) are initialized from the level-assigned GCA and locally
-                refined around their key-frame indices. Each KfA acts as a local canonical space for its temporal
-                neighborhood, forming an anchor relay that supports long-range modeling and random temporal access
-                under bounded memory.
-              </p>
-            </div>
-          </div>
-
-          <div class="column is-6">
-            <div class="glass-box">
-              <h5 class="title is-5 method-title">Bidirectional Deformation &amp; Blending</h5>
-              <p class="has-text-left">
-                In the Progressive Windowed Deformation (PWD) stage, each KfA learns forward and backward
-                deformation fields within a local bidirectional deformation window, with anchors loaded on demand to
-                keep GPU memory bounded. The Intermediate Frame Blending (IFB) stage then learns temporal opacity
-                weights to fuse neighboring KfAs, yielding smooth transitions and consistent long-range motion.
-              </p>
-            </div>
-          </div>
-
-          <div class="column is-6">
-            <div class="glass-box">
-              <h5 class="title is-5 method-title">Feature-variance-guided Hierarchical Densification</h5>
-              <p class="has-text-left">
-                Feature-variance-guided Hierarchical Densification (FHD) uses the variance of anchor features as a
-                proxy for local frequency, assigning levels and modulating gradient-based densification accordingly.
-                Low-frequency structure is stabilized early, while high-frequency regions are refined later, improving
-                reconstruction quality without exceeding the memory budget.
-              </p>
-            </div>
-          </div>
+      <div class="column is-6">
+        <div class="glass-box">
+          <h5 class="title is-5 method-title">Feature-variance-guided Hierarchical Densification</h5>
+          <p class="has-text-left">
+            <strong>Feature-variance-guided Hierarchical Densification (FHD)</strong> uses the variance of anchor features as a
+            proxy for local frequency, assigning levels and modulating gradient-based densification accordingly.
+            Low-frequency structure is stabilized early, while high-frequency regions are refined later, improving
+            reconstruction quality without exceeding the memory budget.
+          </p>
         </div>
       </div>
     </div>
+  </div>
 </section>
 
+<!-- ================= DATASET ================= -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered section-title">Datasets</h2>
+
+    <!-- Table 1 & Dataset visualization slider -->
+    <div class="columns is-centered">
+      <div class="column is-full-width has-text-centered">
+
+        <!-- method-slider 스타일을 그대로 재사용 -->
+        <div class="method-slider dataset-slider">
+          <div class="method-slider-track">
+            <!-- Slide 0: Table 1 (dataset statistics) -->
+            <div class="method-slide">
+              <!-- TODO: 실제 표 이미지 파일명으로 교체 -->
+              <img src="./images/dataset_table.png" alt="Table 1: Dataset statistics">
+            </div>
+
+            <!-- Slide 1: Frame / camera-distance visualization -->
+            <div class="method-slide">
+              <!-- TODO: 실제 피규어 이미지 파일명으로 교체 -->
+              <img src="./images/dataset_figure.png" alt="Figure: Dataset visualization">
+            </div>
+          </div>
+          <button class="method-slider-btn prev">&#10094;</button>
+          <button class="method-slider-btn next">&#10095;</button>
+        </div>
+
+        <!-- 슬라이드에 따라 바뀌는 캡션 -->
+        <p id="dataset-caption"
+           class="is-size-5 has-text-justified"
+           style="margin-top: 12px;">
+          <!-- JS에서 초기화 -->
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 <!-- ================= RESULTS ================= -->
-<<!-- ================= RESULTS ================= -->
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered section-title">Results</h2>
@@ -738,7 +830,7 @@
     <!-- TODO: 논문 출판 후 BibTeX 갱신 -->
     <pre><code>@article{Kwak2025MoRel,
   title   = {MoRel: Long-Range Flicker-Free 4D Motion Modeling via Anchor Relay-based Bidirectional Blending with Hierarchical Densification},
-  author  = {angwoon Kwak and Weeyoung Kwon and Jun Young Jeong and Geonho Kim and Joonsoo Kim and Won-Sik Cheong and ihyong Oh},
+  author  = {Sangwoon, Kwak and Weeyoung, Kwon and Jun, Young Jeong and Geonho, Kim and Won-Sik, Cheong and ihyong, Oh},
   journal = {arXiv preprint arXiv:xxxx.xxxxx},
   year    = {2025}
 }</code></pre>
@@ -772,9 +864,121 @@
   </div>
 </footer>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('.method-slider');
+    if (!slider) return;
+
+    const track      = slider.querySelector('.method-slider-track');
+    const slides     = slider.querySelectorAll('.method-slide');
+    const prevButton = slider.querySelector('.method-slider-btn.prev');
+    const nextButton = slider.querySelector('.method-slider-btn.next');
+    const captionEl  = document.getElementById('method-caption');
+
+    // 슬라이드 0,1,2에 대응하는 Figure 1/2/3 캡션
+    const captions = [
+      // Figure 1
+      `<span class="fig-label">Figure 1.</span> Overview of <strong>MoRel</strong>. ` +
+      `The <strong>Anchor Relay-based Bidirectional Blending (ARBB)</strong> framework decomposes long-range 4D motion into ` +
+      `periodically placed key-frame anchors and bidirectional deformation windows, enabling temporally coherent ` +
+      `and memory-bounded 4D Gaussian Splatting. The pipeline consists of an <strong><em>Anchor Relay phase</em> ` +
+      `(GCA/KfA construction)</strong> and a <em><strong>Bidirectional Blending phase</em> (PWD/IFB)</strong> with <strong>feature-variance-guided ` +
+      `hierarchical densification</strong>.`,
+
+      // Figure 2
+      `<span class="fig-label">Figure 2.</span> (a) All-at-once training suffers from memory overflow. ` +
+      `(b) Chunk-wise training reduces memory cost but causes inter-chunk interference. ` +
+      `(c) Our <strong>Bidirectional Blending (PWD + IFB)</strong> maintains bounded memory and prevents inter-chunk interference.`,
+
+      // Figure 3
+      `<span class="fig-label">Figure 3.</span> (a) Variance-based Leveling: After GCA training, we assign a level ` +
+      `to each anchor-point guided by the feature-variance. (b) Level-wise Densification: During the KfA and PWD ` +
+      `trainings, gradients for KfA densification are modulated by <strong>level-specific weights, enabling early ` +
+      `low-frequency stabilization and late high-frequency refinement</strong>.`
+    ];
+
+    let index = 0;
+
+    function updateSlider() {
+      track.style.transform = 'translateX(' + (-index * 100) + '%)';
+      if (captionEl) {
+        captionEl.innerHTML = captions[index];
+      }
+    }
+
+    prevButton.addEventListener('click', function () {
+      index = (index - 1 + slides.length) % slides.length;
+      updateSlider();
+    });
+
+    nextButton.addEventListener('click', function () {
+      index = (index + 1) % slides.length;
+      updateSlider();
+    });
+
+    // 최초 로딩 시 Figure 1 캡션으로 초기화
+    updateSlider();
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('.dataset-slider');
+    if (!slider) return;
+
+    const track      = slider.querySelector('.method-slider-track');
+    const slides     = slider.querySelectorAll('.method-slide');
+    const prevButton = slider.querySelector('.method-slider-btn.prev');
+    const nextButton = slider.querySelector('.method-slider-btn.next');
+    const captionEl  = document.getElementById('dataset-caption');
+
+    // 0: Table 1, 1: 시각화 피규어
+    const captions = [
+      // Table 1 캡션
+      `<strong>Table 1.</strong> Dataset statistics for <strong>SelfCap<sub>LR</sub></strong>, ` +
+      `<strong>PanopticSports</strong>, and <strong>DyCheck-iPhone</strong>. ` +
+      `For each scene, we summarize the number of images, Frames-Per-Second (FPS), ` +
+      `the number of cameras, the training image resolution, the average OFps ` +
+      `(average optical-flow magnitude per second), and the normalized camera distance ` +
+      `used in our experiments.`,
+
+      // 시각화 피규어 캡션
+      `<strong>Figure.</strong> Visualization of the datasets analyzed in Table&nbsp;1. ` +
+      `(a) We visualize frames sampled every 0.5&nbsp;seconds over a 1-second duration, ` +
+      `scaling each frame according to its relative resolution; OFps shown below each sequence ` +
+      `indicates the average optical-flow magnitude per second. ` +
+      `(b) We also compare the distance between the closest pair of cameras. ` +
+      `SelfCap<sub>LR</sub> exhibits high resolution, fast motion within a unit time, ` +
+      `and large camera parallax over a wide spatial extent compared to prior datasets.`
+    ];
+
+    let index = 0;
+
+    function updateDatasetSlider() {
+      track.style.transform = 'translateX(' + (-index * 100) + '%)';
+      if (captionEl) {
+        captionEl.innerHTML = captions[index];
+      }
+    }
+
+    prevButton.addEventListener('click', function () {
+      index = (index - 1 + slides.length) % slides.length;
+      updateDatasetSlider();
+    });
+
+    nextButton.addEventListener('click', function () {
+      index = (index + 1) % slides.length;
+      updateDatasetSlider();
+    });
+
+    // 초기 상태: Table 1 캡션
+    updateDatasetSlider();
+  });
+</script>
+
+
+
 </body>
 </html>
-
 
 
 
